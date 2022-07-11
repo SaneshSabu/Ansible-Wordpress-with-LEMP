@@ -6,6 +6,7 @@
     - package_vars
     - secret_vars
     - nginx_vars
+    - wordpress_vars
   tasks:
 
     - name: "Install Packges"
@@ -74,9 +75,35 @@
         name: nginx
         state: restarted
         enabled: true
+    
+    - name: "Downloading Archive File {{ wp_url }}"
+      get_url:
+        url: "{{ wp_url }}"
+        dest: /tmp/wordpress.tar.gz
+            
+    - name: "Extracting the File"
+      unarchive:
+        src: /tmp/wordpress.tar.gz
+        dest: /tmp/
+        remote_src: true
+            
+    - name: "Copying Contents to the Doc-Root"
+      copy:
+        src: /tmp/wordpress/
+        dest: "/var/www/{{ domain_name }}"
+        remote_src: true
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_group }}"
+            
+    - name: "Wordpress - Creating wp-config.php from template"
+      template:
+        src: ./wp-config.tmpl
+        dest: "/var/www/{{ domain_name }}/wp-config.php"
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_group }}"
 
 
-
+   
 
 
 
