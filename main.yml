@@ -53,3 +53,38 @@
         host: "localhost"
         password: "{{ mysql_user_password }}"
         priv: "{{ mysql_database }}.*:ALL"
+    - name: "Configuring Vhost"
+      template:
+        src: ./site.conf.tmpl
+        dest: /etc/nginx/sites-available/site.conf
+
+    - name: "Enabling Conf file"
+      file: 
+        src: /etc/nginx/sites-available/site.conf
+        dest: /etc/nginx/sites-enabled/site.conf
+        state: link 
+    
+    - name: "Copying default conf File"
+      copy:
+        src: ./default
+        dest: /etc/nginx/sites-available/default
+    
+    - name: "Restarting and Enabling Service"
+      service:
+        name: nginx
+        state: restarted
+        enabled: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
