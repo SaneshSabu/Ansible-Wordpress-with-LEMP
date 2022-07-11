@@ -1,0 +1,5 @@
+---
+nginx_port: 80
+nginx_user: "www-data"
+nginx_group: "www-data"
+domain_name: "devops.asnible.com"

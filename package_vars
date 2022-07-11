@@ -1,0 +1,7 @@
+---
+package:
+  - nginx
+  - php-fpm
+  - php-mysql
+  - mariadb-server
+  - python3-pymysql
