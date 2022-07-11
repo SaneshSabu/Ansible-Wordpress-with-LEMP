@@ -1,0 +1,14 @@
+---
+- name: "Insatlling LEMP Stack"
+  hosts: ubuntu
+  become: yes
+  vars_files:
+    - package_vars
+    - secret_vars
+    - nginx_vars
+  tasks:
+
+    - name: "Install Packges"
+      apt:
+        update_cache: true
+        name: "{{ package }}"
