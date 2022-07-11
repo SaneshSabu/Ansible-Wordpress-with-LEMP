@@ -12,3 +12,44 @@
       apt:
         update_cache: true
         name: "{{ package }}"
+
+    - name: "Restarting and Enabling Service"
+      service:
+        name: mariadb
+        state: restarted
+        enabled: true
+            
+    - name: "Setting Root Passsword"
+      ignore_errors: true
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_user: "root"
+        login_password: ""
+        name: "root"
+        password: "{{ mysql_root_password }}"
+        host_all: true
+            
+    - name: "Removing Anonymous Users"
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_user: "root"
+        login_password: "{{ mysql_root_password }}"
+        name: ""
+        state: absent
+        host_all: true
+            
+    - name: "Creating Database"
+      mysql_db:
+        login_user: "root"
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ mysql_database }}"
+        state: present
+            
+    - name: "Creating mysql user"
+      mysql_user:
+        login_user: "root"
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ mysql_user }}"
+        host: "localhost"
+        password: "{{ mysql_user_password }}"
+        priv: "{{ mysql_database }}.*:ALL"
